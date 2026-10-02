@@ -1,4 +1,4 @@
-﻿// Jude Safaris and Adventures - Executive Packages Catalog
+// Jude Safaris and Adventures - Executive Packages Catalog
 import { motion } from "framer-motion";
 import { Calendar, ArrowRight, ShieldCheck, MapPin, Check, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -169,7 +169,7 @@ const Packages = () => {
 
   const buildWhatsAppInquiry = (pkgName: string) => {
     const text = `Habari Jude Safaris! I'm interested in booking the *${pkgName}* package. Please share availability and customized quote for our dates.`;
-    return `https://wa.me/254422832791?text=${encodeURIComponent(text)}`;
+    return `https://wa.me/254742283279?text=${encodeURIComponent(text)}`;
   };
 
   return (

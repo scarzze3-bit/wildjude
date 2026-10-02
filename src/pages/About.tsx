@@ -9,19 +9,20 @@ import { toImageSrc, withImageFallback } from "@/lib/images";
 import { BRAND } from "@/lib/brand";
 
 const NGANYA_PHOTOS = [
-  { src: "https://images.unsplash.com/photo-1523805009345-7448845a9e53?w=900&q=85&fit=crop", alt: "Safari convoy Masai Mara", caption: "The Nganya in its element - Masai Mara at dusk" },
-  { src: "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=900&q=85&fit=crop", alt: "Luxury safari vehicle", caption: "Executive cabin - leather, legroom, live power" },
-  { src: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=900&q=85&fit=crop", alt: "Elephants Amboseli", caption: "Amboseli Giants - front-row seats, zero compromise" },
-  { src: "https://images.unsplash.com/photo-1549366021-9f761d450615?w=900&q=85&fit=crop", alt: "Kenya savanna sunrise", caption: "Baringo skies - where the Rift Valley breathes" },
+  { src: "/images/nganya/nganya-1.png", alt: "Flagship Jude Safaris Nganya Cruiser", caption: "The Flagship Nganya - Custom aero lip, all-terrain alloys & Rift Valley stance" },
+  { src: "/images/nganya/nganya-2.png", alt: "Executive VIP Cabin Interior", caption: "Executive Cabin - Custom recliner captain chairs, armrests & executive legroom" },
+  { src: "/images/nganya/nganya-3.png", alt: "High-Roof Custom Nganya Front Profile", caption: "High-Roof Beast - Custom front grille, precision LEDs & safari dominance" },
+  { src: "/images/nganya/nganya-4.png", alt: "Safari Nganya Fleet Side Profile", caption: "Matatu Nganya Soul Meets Safari Touring - Built for Kenya's roughest terrain" },
+  { src: "/images/nganya/nganya-5.png", alt: "Nganya Custom Craftsmanship Detail", caption: "Custom aerodynamic styling, tinted windows & bespoke safari craftsmanship" },
 ];
 
 const GALLERY_PHOTOS = [
+  { src: "/images/nganya/nganya-1.png", alt: "Flagship Jude Safaris Nganya Cruiser" },
+  { src: "/images/nganya/nganya-2.png", alt: "Executive VIP Cabin Interior" },
+  { src: "/images/nganya/nganya-3.png", alt: "Custom Front Aero & LED Lighting" },
+  { src: "/images/nganya/nganya-4.png", alt: "Nganya Custom Fleet" },
+  { src: "/images/nganya/nganya-5.png", alt: "Bespoke Van Craftsmanship" },
   { src: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=600&q=80&fit=crop", alt: "Elephant herds Amboseli" },
-  { src: "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=600&q=80&fit=crop", alt: "Safari interior luxury" },
-  { src: "https://images.unsplash.com/photo-1549366021-9f761d450615?w=600&q=80&fit=crop", alt: "Kenya sunrise Rift Valley" },
-  { src: "https://images.unsplash.com/photo-1523805009345-7448845a9e53?w=600&q=80&fit=crop", alt: "Safari vehicles Mara" },
-  { src: "https://images.unsplash.com/photo-1568010434370-80d3c8c64a73?w=600&q=80&fit=crop", alt: "Masai Mara wildebeest" },
-  { src: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&q=80&fit=crop", alt: "Kenya wildlife lions" },
 ];
 
 const values = [

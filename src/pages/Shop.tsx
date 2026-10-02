@@ -1,4 +1,4 @@
-﻿// Jude Safaris and Adventures - Executive Merch Store
+// Jude Safaris and Adventures - Executive Merch Store
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -105,7 +105,7 @@ const Shop = () => {
     });
     message += `\n*Total Amount:* KES ${totalPrice().toLocaleString()}\n`;
     message += `Please confirm delivery details in Kenya / International dispatch.`;
-    return `https://wa.me/254422832791?text=${encodeURIComponent(message)}`;
+    return `https://wa.me/254742283279?text=${encodeURIComponent(message)}`;
   };
 
   return (
@@ -488,7 +488,7 @@ const Shop = () => {
                     <Button
                       onClick={() => {
                         alert(
-                          `Jude Safaris M-Pesa Checkout\nTotal: KES ${totalPrice().toLocaleString()}\n\nTo complete payment, please confirm your order on WhatsApp (+254 422 832 791) or call our executive desk.`
+                          `Jude Safaris M-Pesa Checkout\nTotal: KES ${totalPrice().toLocaleString()}\n\nTo complete payment, please confirm your order on WhatsApp (+254 742 283 279) or call our executive desk.`
                         );
                       }}
                       variant="outline"

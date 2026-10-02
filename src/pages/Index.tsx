@@ -1,4 +1,4 @@
-﻿// Jude Safaris and Adventures - Executive Homepage
+// Jude Safaris and Adventures - Executive Homepage
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -151,6 +151,8 @@ const toProxiedVideoUrl = (url: string) =>
 
 const heroMedia = [
   { type: "image", src: heroImage },
+  { type: "image", src: "/images/nganya/nganya-1.png" },
+  { type: "image", src: "/images/nganya/nganya-3.png" },
   { type: "video", src: toProxiedVideoUrl("https://pixabay.com/videos/download/video-114145_medium.mp4") },
   { type: "video", src: toProxiedVideoUrl("https://pixabay.com/videos/download/video-119527_medium.mp4") },
   { type: "video", src: toProxiedVideoUrl("https://pixabay.com/videos/download/video-126212_medium.mp4") },
@@ -411,6 +413,78 @@ const Index = () => {
               </motion.div>
             ))}
           </div>
+
+          {/* Authentic Nganya Fleet Showcase */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="mt-16 pt-12 border-t border-safari-gold/20"
+          >
+            <div className="flex flex-col md:flex-row md:items-end justify-between mb-8">
+              <div>
+                <p className="text-safari-gold font-semibold tracking-[0.25em] uppercase text-xs mb-2">
+                  Live The Nganya Culture
+                </p>
+                <h3 className="text-2xl md:text-3xl font-display font-bold text-white">
+                  Our Custom <span className="italic text-safari-gold">Safari Cruiser Fleet</span>
+                </h3>
+              </div>
+              <Link to="/about" className="text-safari-gold text-sm font-semibold flex items-center gap-1 hover:gap-2 transition-all mt-3 md:mt-0">
+                Explore The Van Craftsmanship <ChevronRight className="w-4 h-4" />
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[
+                {
+                  src: "/images/nganya/nganya-1.png",
+                  title: "Flagship Nganya Van",
+                  subtitle: "Custom Stance & Trail Alloys",
+                  tag: "Flagship Cruiser",
+                },
+                {
+                  src: "/images/nganya/nganya-2.png",
+                  title: "VIP Executive Cabin",
+                  subtitle: "Reclining Captain Chairs with Armrests",
+                  tag: "VIP Interior",
+                },
+                {
+                  src: "/images/nganya/nganya-3.png",
+                  title: "High-Roof Safari Beast",
+                  subtitle: "Custom Grille & Precision LED Array",
+                  tag: "Custom Spec",
+                },
+              ].map((fleet, idx) => (
+                <motion.div
+                  key={fleet.title}
+                  variants={fadeUp}
+                  custom={idx}
+                  className="group relative rounded-2xl overflow-hidden border border-safari-gold/25 bg-safari-warm-brown/40 shadow-xl"
+                >
+                  <div className="h-64 overflow-hidden relative">
+                    <img
+                      src={fleet.src}
+                      alt={fleet.title}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+                    <span className="absolute top-4 left-4 bg-safari-gold/90 text-safari-charcoal text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider backdrop-blur-sm">
+                      {fleet.tag}
+                    </span>
+                  </div>
+                  <div className="p-5">
+                    <h4 className="font-display font-bold text-lg text-white group-hover:text-safari-gold transition-colors">
+                      {fleet.title}
+                    </h4>
+                    <p className="text-safari-sand/70 text-xs mt-1">
+                      {fleet.subtitle}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
         </div>
       </section>
 

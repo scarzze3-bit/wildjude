@@ -1,12 +1,12 @@
-﻿// Jude Safaris and Adventures - Brand Constants
+// Jude Safaris and Adventures - Brand Constants
 
 export const BRAND = {
   name: 'Jude Safaris and Adventures',
   shortName: 'Jude Safaris',
   tagline: 'Where the Nganya Meets the Wild',
   taglineSub: 'Premium Kenyan Expeditions - Luxury Vans, Timeless Circuits',
-  phone: '+254 422 832 791',
-  whatsapp: '254422832791',
+  phone: '+254 742 283 279',
+  whatsapp: '254742283279',
   email: 'blackjudecatie5913@gmail.com',
   website: 'judesafaris.co.ke',
   location: 'Kabarnet, Baringo',
