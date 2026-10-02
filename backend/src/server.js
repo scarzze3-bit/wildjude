@@ -1,4 +1,4 @@
-import express from 'express';
+﻿import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
@@ -8,6 +8,8 @@ import authRoutes from './routes/auth.js';
 import adminRoutes from './routes/admin.js';
 import publicRoutes from './routes/public.js';
 import customerAuthRoutes from './routes/customer-auth.js';
+import mpesaRoutes from './routes/mpesa.js';
+import { createRateLimiter, securityHeaders } from './middleware/rateLimiter.js';
 
 dotenv.config();
 
@@ -19,19 +21,17 @@ const uploadsDir = path.resolve(__dirname, '../uploads');
 
 fs.mkdirSync(uploadsDir, { recursive: true });
 
-// Respect X-Forwarded-* headers when running behind a proxy (Render/Vercel).
 app.set('trust proxy', 1);
+app.use(securityHeaders);
 
-// Middleware
-// Configure CORS using CORS_ORIGIN env var (comma-separated list)
+// ── CORS — Jude Safaris & Adventures production domains ──
 const defaultProductionOrigins = [
-  'https://wildwavesafaris.com',
-  'https://www.wildwavesafaris.com',
-  'https://wildwave-safari.vercel.app',
-  'https://wildwave-safaris-admin.vercel.app',
-  'https://wildwave-admin.vercel.app',
-  'https://wildwave-safaris.onrender.com',
-  'https://wildwave-safaris-admin.onrender.com',
+  'https://judesafaris.co.ke',
+  'https://www.judesafaris.co.ke',
+  'https://jude-safaris.vercel.app',
+  'https://jude-safaris-admin.vercel.app',
+  'https://jude-safaris.onrender.com',
+  'https://jude-safaris-api.onrender.com',
 ];
 
 const envOrigins = (process.env.CORS_ORIGIN || '')
@@ -46,10 +46,7 @@ const configuredOrigins = envOrigins.includes('*')
     : (process.env.NODE_ENV === 'production' ? defaultProductionOrigins : ['*']));
 
 const normalizeOrigin = (value) => {
-  if (!value) {
-    return '';
-  }
-
+  if (!value) return '';
   try {
     const url = new URL(value);
     return `${url.protocol}//${url.host}`.toLowerCase();
@@ -60,17 +57,14 @@ const normalizeOrigin = (value) => {
 
 const withWwwVariants = (origin) => {
   const normalized = normalizeOrigin(origin);
-
   try {
     const url = new URL(normalized);
     const variants = new Set([normalized]);
-
     if (url.hostname.startsWith('www.')) {
-      variants.add(`${url.protocol}//${url.hostname.slice(4)}${url.port ? `:${url.port}` : ''}`);
+      variants.add(`${url.protocol}//${url.hostname.slice(4)}${url.port ? ':' + url.port : ''}`);
     } else {
-      variants.add(`${url.protocol}//www.${url.hostname}${url.port ? `:${url.port}` : ''}`);
+      variants.add(`${url.protocol}//www.${url.hostname}${url.port ? ':' + url.port : ''}`);
     }
-
     return variants;
   } catch {
     return new Set([normalized]);
@@ -78,15 +72,10 @@ const withWwwVariants = (origin) => {
 };
 
 const allowlist = new Set();
-configuredOrigins
-  .forEach((origin) => {
-    if (origin === '*') {
-      allowlist.add('*');
-      return;
-    }
-
-    withWwwVariants(origin).forEach((variant) => allowlist.add(variant));
-  });
+configuredOrigins.forEach((origin) => {
+  if (origin === '*') { allowlist.add('*'); return; }
+  withWwwVariants(origin).forEach((v) => allowlist.add(v));
+});
 
 const corsOptions = {
   origin: (origin, callback) => {
@@ -106,29 +95,34 @@ app.options('*', cors(corsOptions));
 app.use(express.json({ limit: '12mb' }));
 app.use('/uploads', express.static(uploadsDir));
 
-// Health check
+// ── Health check ──
 app.get('/health', (req, res) => {
-  res.json({ status: 'OK' });
+  res.json({ status: 'OK', brand: 'Jude Safaris & Adventures', version: '2.0.0' });
 });
 
-// Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/customer-auth', customerAuthRoutes);
-app.use('/api/admin', adminRoutes);
-app.use('/api/public', publicRoutes);
+// ── Rate Limiters ──
+const authLimiter = createRateLimiter({ windowMs: 15 * 60 * 1000, max: 25, message: 'Too many authentication attempts. Please wait 15 minutes.' });
+const mpesaLimiter = createRateLimiter({ windowMs: 5 * 60 * 1000, max: 15, message: 'Too many payment requests. Please check your phone for pending STK push.' });
+const generalLimiter = createRateLimiter({ windowMs: 15 * 60 * 1000, max: 250 });
 
-// Error handling
+// ── Routes ──
+app.use('/api/auth', authLimiter, authRoutes);
+app.use('/api/customer-auth', authLimiter, customerAuthRoutes);
+app.use('/api/mpesa', mpesaLimiter, mpesaRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/public', generalLimiter, publicRoutes);
+
+// ── Error handling ──
 app.use((err, req, res, next) => {
   if (err && err.message === 'Not allowed by CORS') {
     res.status(403).json({ error: 'CORS blocked for this origin' });
     return;
   }
-
   console.error(err.stack);
-  res.status(500).json({ error: 'Something went wrong!' });
+  res.status(500).json({ error: 'Something went wrong' });
 });
 
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-  console.log(`📊 Health check: http://localhost:${PORT}/health`);
+  console.log(`🦁 Jude Safaris API running on http://localhost:${PORT}`);
+  console.log(`✅ Health check: http://localhost:${PORT}/health`);
 });

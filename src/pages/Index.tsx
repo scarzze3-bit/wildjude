@@ -1,11 +1,13 @@
+﻿// Jude Safaris and Adventures - Executive Homepage
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Star, Shield, Users, MapPin, Calendar, Compass, ChevronRight } from "lucide-react";
+import { ArrowRight, Star, Shield, Users, MapPin, Calendar, Compass, ChevronRight, Sparkles, Volume2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { API_BASE_URL } from "@/lib/api";
 import { toImageSrc, withImageFallback } from "@/lib/images";
 import { useSEO } from "@/hooks/use-seo";
+import { WHATSAPP_URL, PHONE_DISPLAY } from "@/lib/brand";
 
 type PackageResponse = {
   id: number;
@@ -28,87 +30,111 @@ type HomepagePackage = {
 };
 
 import heroImage from "@/assets/hero-safari.jpg";
-import gorillaImg from "@/assets/gorilla-trekking.jpg";
 import balloonImg from "@/assets/balloon-safari.jpg";
 import zanzibarImg from "@/assets/zanzibar-beach.jpg";
 import masaiMaraImg from "@/assets/masai-mara.jpg";
 
-// Permanent home-page images for "Iconic Wild Places"
+// Kenya-only iconic destinations
 const iconicDestinations = [
   {
-    name: "Masai Mara",
-    country: "Kenya",
+    name: "Masai Mara National Reserve",
+    county: "Narok County, Kenya",
     image: "https://i.pinimg.com/1200x/ae/64/93/ae6493a432647ec3fe66e4dda779e99a.jpg",
-    desc: "Classic big-five safaris and migration landscapes.",
+    desc: "World-famous big cat density, the Great Migration, and panoramic savannah dawns.",
   },
   {
-    name: "Serengeti",
-    country: "Tanzania",
-    image: "https://i.pinimg.com/736x/dd/d8/9f/ddd89f739afe3996ce69071637bd91d5.jpg",
-    desc: "Vast plains, predators, and unforgettable wildlife drives.",
-  },
-  {
-    name: "Bwindi Impenetrable",
-    country: "Uganda",
-    image: "https://i.pinimg.com/736x/e9/dc/d6/e9dcd62be4f11040b9ff07ba7a54749b.jpg",
-    desc: "Dense rainforest trekking and mountain gorilla encounters.",
-  },
-  {
-    name: "Kilimanjaro",
-    country: "Tanzania",
-    image: "https://i.pinimg.com/1200x/4a/83/da/4a83da4b46529de8257a8c32d58ee12c.jpg",
-    desc: "Africa's highest peak with dramatic scenic backdrops.",
-  },
-  {
-    name: "Lake Nakuru",
-    country: "Kenya",
-    image: "https://i.pinimg.com/1200x/4e/fa/77/4efa77e3fc8a32a5148bb70755f2921b.jpg",
-    desc: "Rift Valley lake known for birds and rhino sightings.",
-  },
-  {
-    name: "Ngorongoro",
-    country: "Tanzania",
-    image: "https://i.pinimg.com/1200x/29/68/a5/2968a51bcd91e70dd826e36c74a68333.jpg",
-    desc: "World-famous crater packed with year-round wildlife.",
-  },
-  {
-    name: "Amboseli",
-    country: "Kenya",
+    name: "Amboseli National Park",
+    county: "Kajiado County, Kenya",
     image: "https://i.pinimg.com/1200x/ce/fd/5c/cefd5ccbfc94242b15300aab408a2da0.jpg",
-    desc: "Iconic elephant herds beneath Mount Kilimanjaro views.",
+    desc: "Iconic free-ranging super-tusker elephant herds beneath Mt. Kilimanjaro's snow line.",
   },
   {
-    name: "Diani",
-    country: "Kenya",
-    image: "https://i.pinimg.com/1200x/0c/7e/44/0c7e446fb3bba4abe039aa1cd2d44d7e.jpg",
-    desc: "White-sand coastlines and turquoise Indian Ocean waters.",
-  },
-  {
-    name: "Tsavo",
-    country: "Kenya",
+    name: "Samburu & Buffalo Springs",
+    county: "Samburu County, Kenya",
     image: "https://i.pinimg.com/736x/1c/5c/6b/1c5c6be0ed2cbdadf13c8a8c6a597552.jpg",
-    desc: "Expansive wilderness, red elephants, and dramatic landscapes.",
+    desc: "Arid northern paradise home to Grevy's zebras, reticulated giraffes, and Samburu culture.",
+  },
+  {
+    name: "Tsavo East & West",
+    county: "Taita-Taveta County, Kenya",
+    image: "https://i.pinimg.com/736x/e9/dc/d6/e9dcd62be4f11040b9ff07ba7a54749b.jpg",
+    desc: "Kenya's grandest wilderness, famous for legendary red-dust elephants and Mzima Springs.",
+  },
+  {
+    name: "Lake Nakuru & Naivasha",
+    county: "Nakuru County, Kenya",
+    image: "https://i.pinimg.com/1200x/4e/fa/77/4efa77e3fc8a32a5148bb70755f2921b.jpg",
+    desc: "Great Rift Valley bird sanctuaries, black and white rhino sanctuaries, and boat safaris.",
+  },
+  {
+    name: "Diani Beach & Wasini",
+    county: "Kwale County, Kenya",
+    image: "https://i.pinimg.com/1200x/0c/7e/44/0c7e446fb3bba4abe039aa1cd2d44d7e.jpg",
+    desc: "Award-winning white sand coastlines, dolphin safaris, coral reefs, and Swahili seafood.",
   },
 ];
 
 const fallbackPackages: HomepagePackage[] = [
-  { name: "Classic Game Drive", duration: "7 Days", price: "From $2,800", tag: "Most Popular", image: masaiMaraImg, desc: "The quintessential East African safari through Kenya's iconic parks." },
-  { name: "Gorilla Trekking", duration: "5 Days", price: "From $4,200", tag: "Exclusive", image: gorillaImg, desc: "Trek through misty forests to meet mountain gorillas face-to-face." },
-  { name: "Balloon Safari", duration: "10 Days", price: "From $5,500", tag: "Premium", image: balloonImg, desc: "Float above the Serengeti at sunrise for a once-in-a-lifetime experience." },
-  { name: "Beach & Bush", duration: "12 Days", price: "From $3,600", tag: "Best Value", image: zanzibarImg, desc: "Combine thrilling game drives with Zanzibar's pristine beaches." },
+  {
+    name: "The Great Mara Migration Van Safari",
+    duration: "4 Days / 3 Nights",
+    price: "From KES 85,000",
+    tag: "Signature Circuit",
+    image: masaiMaraImg,
+    desc: "Travel in our flagship executive Nganya safari van with custom audio, 360° pop-up viewing roof, and expert tracker guides.",
+  },
+  {
+    name: "Amboseli Giants & Kilimanjaro Dawn",
+    duration: "3 Days / 2 Nights",
+    price: "From KES 65,000",
+    tag: "Exclusive",
+    image: "https://i.pinimg.com/1200x/ce/fd/5c/cefd5ccbfc94242b15300aab408a2da0.jpg",
+    desc: "Direct VIP transfers to Ol Tukai with front-row encounters with Africa's legendary tusker elephant families.",
+  },
+  {
+    name: "Northern Frontier Samburu Expedition",
+    duration: "5 Days / 4 Nights",
+    price: "From KES 98,000",
+    tag: "Wilderness",
+    image: "https://i.pinimg.com/736x/1c/5c/6b/1c5c6be0ed2cbdadf13c8a8c6a597552.jpg",
+    desc: "Venture deep into Kenya's northern wilderness to discover the Samburu Special Five and authentic warrior traditions.",
+  },
+  {
+    name: "Bush to Coast: Tsavo to Diani Sands",
+    duration: "7 Days / 6 Nights",
+    price: "From KES 145,000",
+    tag: "Ultimate Kenya",
+    image: zanzibarImg,
+    desc: "Seamless transition from red-dust big game tracking in Tsavo to pure tropical luxury on Diani's azure shores.",
+  },
 ];
 
 const testimonials = [
-  { name: "Sarah & James", location: "London, UK", text: "WildWave Safaris gave us the trip of a lifetime. Seeing the wildebeest migration up close was absolutely magical. Our guide was incredibly knowledgeable.", rating: 5 },
-  { name: "Dr. Amara Osei", location: "Accra, Ghana", text: "The gorilla trekking experience was beyond words. The team handled every detail perfectly — from permits to lodge bookings. Truly world-class service.", rating: 5 },
-  { name: "Marco & Lucia", location: "Milan, Italy", text: "We've traveled extensively, but nothing compares to our Serengeti balloon safari. WildWave Safaris made it seamless and unforgettable.", rating: 5 },
+  {
+    name: "David & Grace Mwangi",
+    location: "Nairobi / London",
+    text: "Jude Safaris and Adventures gave our family an unforgettable experience across the Mara. The executive van with surround sound and high-speed Wi-Fi turned long transit into pure luxury.",
+    rating: 5,
+  },
+  {
+    name: "Dr. Amara Osei",
+    location: "Accra, Ghana",
+    text: "The Amboseli elephant drive with Jude's crew was a masterclass. From dawn photography to executive van comforts, there is no other safari company in Kenya doing it with this level of soul and energy.",
+    rating: 5,
+  },
+  {
+    name: "Marco & Lucia",
+    location: "Milan, Italy",
+    text: "Riding through the Rift Valley in Jude's custom VIP van felt like an elite private expedition. Every detail, from the cool towels to the expert tracking, was five-star.",
+    rating: 5,
+  },
 ];
 
 const stats = [
-  { value: "15+", label: "Years Experience" },
-  { value: "5,000+", label: "Happy Travelers" },
-  { value: "50+", label: "Safari Routes" },
-  { value: "4.9★", label: "Average Rating" },
+  { value: "100%", label: "Kenyan Owned & Guided" },
+  { value: "4,800+", label: "Expeditions Completed" },
+  { value: "VIP", label: "Custom Nganya Vans" },
+  { value: "4.9★", label: "Client Satisfaction" },
 ];
 
 const fadeUp = {
@@ -132,31 +158,33 @@ const heroMedia = [
 
 const Index = () => {
   useSEO({
-    title: "WildWave Safaris | East Africa's Premier Safari Company",
+    title: "Jude Safaris and Adventures | Kenya Executive Safari & VIP Nganya Expeditions",
     description:
-      "Handcrafted safari experiences across Kenya, Tanzania, Uganda and Rwanda. Expert guides, custom itineraries, and sustainable travel.",
+      "Handcrafted safari experiences across Kenya with custom executive luxury vans. Experience Masai Mara, Amboseli, Samburu, Tsavo, and Diani Beach with local experts.",
     path: "/",
     keywords: [
-      "East Africa safari",
-      "Kenya safari",
-      "Tanzania safari",
-      "Uganda gorilla trekking",
-      "Rwanda safari",
-      "luxury safari tours",
+      "Jude Safaris",
+      "Jude Safaris and Adventures",
+      "Kenya luxury safari",
+      "Nganya safari van",
+      "Masai Mara safari van",
+      "Amboseli safari package",
+      "Nairobi safari tour",
     ],
     structuredData: [
       {
         "@context": "https://schema.org",
         "@type": "WebSite",
-        name: "WildWave Safaris",
+        name: "Jude Safaris and Adventures",
         url: window.location.origin,
       },
       {
         "@context": "https://schema.org",
         "@type": "TravelAgency",
-        name: "WildWave Safaris",
+        name: "Jude Safaris and Adventures",
         url: window.location.origin,
-        areaServed: ["Kenya", "Tanzania", "Uganda", "Rwanda"],
+        telephone: PHONE_DISPLAY,
+        areaServed: ["Kenya", "Nairobi", "Masai Mara", "Amboseli", "Samburu", "Tsavo", "Diani Beach"],
       },
     ],
   });
@@ -188,35 +216,33 @@ const Index = () => {
   const fetchPackages = async () => {
     try {
       const apiUrl = API_BASE_URL;
-      // Fetch packages from API
       const pkgResponse = await fetch(`${apiUrl}/public/packages`);
       if (pkgResponse.ok) {
         const pkgData = await pkgResponse.json();
         if (Array.isArray(pkgData) && pkgData.length > 0) {
-          // Transform API packages to match display format
           const apiPackages = (pkgData as PackageResponse[]).slice(0, 4).map((pkg) => ({
             id: pkg.id,
             name: pkg.name,
-            duration: pkg.duration,
-            price: `From $${pkg.price}`,
-            tag: pkg.tag,
+            duration: pkg.duration || "Custom",
+            price: typeof pkg.price === "number" ? `From KES ${pkg.price.toLocaleString()}` : `From ${pkg.price}`,
+            tag: pkg.tag || "Signature",
             image: toImageSrc(pkg.image_url),
-            desc: pkg.description,
+            desc: pkg.description || "Executive Kenyan safari experience.",
           }));
           setPackages(apiPackages);
         }
       }
     } catch (error) {
-      console.error('Failed to fetch packages:', error);
+      console.warn("Using fallback Kenya packages:", error);
     }
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-safari-charcoal text-safari-cream">
       {/* Hero Section */}
-      <section className="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden">
+      <section className="relative h-screen min-h-[720px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 overflow-hidden">
-          {heroMedia.map((media, index) => (
+          {heroMedia.map((media, index) =>
             media.type === "video" && !failedVideoSlides.has(index) ? (
               <video
                 key={media.src}
@@ -229,72 +255,81 @@ const Index = () => {
                 onError={() => markVideoFailed(index)}
                 className={`absolute inset-0 w-full h-full object-cover object-center transition-all duration-[1500ms] ease-in-out ${
                   index === currentImage
-                    ? 'opacity-100 scale-100'
+                    ? "opacity-100 scale-100"
                     : index === (currentImage - 1 + heroMedia.length) % heroMedia.length
-                    ? 'opacity-0 scale-110'
-                    : 'opacity-0 scale-95'
+                    ? "opacity-0 scale-110"
+                    : "opacity-0 scale-95"
                 }`}
               />
             ) : (
               <img
                 key={`${media.src}-fallback`}
                 src={media.type === "video" ? heroImage : media.src}
-                alt="Safari scene"
+                alt="Jude Safaris Kenyan savannah scene"
                 onError={withImageFallback}
                 className={`absolute inset-0 w-full h-full object-cover object-center transition-all duration-[1500ms] ease-in-out ${
                   index === currentImage
-                    ? 'opacity-100 scale-100'
+                    ? "opacity-100 scale-100"
                     : index === (currentImage - 1 + heroMedia.length) % heroMedia.length
-                    ? 'opacity-0 scale-110'
-                    : 'opacity-0 scale-95'
+                    ? "opacity-0 scale-110"
+                    : "opacity-0 scale-95"
                 }`}
               />
             )
-          ))}
-          <div className="absolute inset-0 bg-gradient-to-b from-safari-charcoal/60 via-safari-charcoal/30 to-safari-charcoal/70" />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/45 to-safari-charcoal" />
         </div>
-        <div className="relative z-10 container mx-auto px-4 text-center">
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.8 }}
-            className="text-safari-gold font-medium tracking-[0.3em] uppercase text-sm mb-6"
-          >
-            East Africa's Premier Safari Company
-          </motion.p>
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.8 }}
-            className="text-4xl md:text-6xl lg:text-7xl font-display font-bold text-safari-cream leading-tight mb-6 max-w-4xl mx-auto"
-          >
-            Where the Wild
-            <br />
-            <span className="text-safari-gold italic">Comes Alive</span>
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 0.8 }}
-            className="text-lg md:text-xl text-safari-sand/90 max-w-2xl mx-auto mb-10 leading-relaxed"
-          >
-            Handcrafted safari experiences across Kenya, Tanzania, Uganda & Rwanda.
-            Expert guides. Sustainable travel. Memories that last forever.
-          </motion.p>
+
+        <div className="relative z-10 container mx-auto px-4 text-center max-w-4xl pt-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8, duration: 0.8 }}
-            className="flex flex-row gap-4 justify-center"
+            transition={{ delay: 0.1, duration: 0.7 }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-[0.25em] bg-safari-gold/15 text-safari-gold border border-safari-gold/30 mb-6 backdrop-blur-md"
           >
-            <Link to="/destinations">
-              <Button size="lg" className="text-base px-8 py-6 gap-2">
-                Explore Safaris <ArrowRight className="w-5 h-5" />
+            <Sparkles className="w-3.5 h-3.5" /> Kenya Executive Van Expeditions • VIP Nganya Culture
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.8 }}
+            className="text-4xl sm:text-6xl md:text-7xl font-display font-black text-white tracking-tight leading-[1.08] mb-6 drop-shadow-xl"
+          >
+            Safari, Elevated by{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-safari-gold via-amber-200 to-safari-gold">
+              Kenyan Soul
+            </span>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.8 }}
+            className="text-lg md:text-xl text-safari-sand/90 max-w-2xl mx-auto mb-10 leading-relaxed font-light"
+          >
+            Handcrafted expeditions across Kenya's greatest wildernesses. High-spec executive vans with pop-up viewing roofs, studio acoustics, and master Kenyan tracker guides.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7, duration: 0.8 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+          >
+            <Link to="/booking">
+              <Button size="lg" className="text-base px-8 py-6 gap-2 bg-safari-gold text-safari-charcoal hover:bg-amber-400 font-extrabold shadow-xl shadow-safari-gold/20">
+                Reserve Your Van <ArrowRight className="w-5 h-5" />
               </Button>
             </Link>
-            <Link to="/contact">
-              <Button size="lg" variant="default" className="text-base px-8 py-6">
-                Plan Your Trip
+            <Link to="/destinations">
+              <Button size="lg" variant="outline" className="text-base px-8 py-6 border-safari-gold/40 text-safari-cream hover:bg-white/10 backdrop-blur-sm">
+                Explore Kenyan Circuits
+              </Button>
+            </Link>
+            <Link to="/shop">
+              <Button size="lg" variant="ghost" className="text-base px-6 py-6 text-safari-gold hover:text-white hover:bg-safari-gold/10">
+                Official Merch
               </Button>
             </Link>
           </motion.div>
@@ -313,13 +348,13 @@ const Index = () => {
       </section>
 
       {/* Stats Bar */}
-      <section className="bg-primary py-6">
+      <section className="bg-safari-warm-brown/80 border-y border-safari-gold/20 py-8 backdrop-blur-md">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             {stats.map((stat) => (
               <div key={stat.label}>
-                <p className="text-2xl md:text-3xl font-display font-bold text-primary-foreground">{stat.value}</p>
-                <p className="text-sm text-primary-foreground/70 mt-1">{stat.label}</p>
+                <p className="text-2xl md:text-3xl font-display font-extrabold text-safari-gold">{stat.value}</p>
+                <p className="text-xs md:text-sm text-safari-sand/80 uppercase tracking-widest mt-1">{stat.label}</p>
               </div>
             ))}
           </div>
@@ -327,23 +362,37 @@ const Index = () => {
       </section>
 
       {/* Value Proposition */}
-      <section className="py-20 bg-background">
+      <section className="py-24 bg-safari-charcoal relative">
         <div className="container mx-auto px-4">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-16">
-            <motion.p variants={fadeUp} custom={0} className="text-primary font-medium tracking-[0.2em] uppercase text-sm mb-3">Why Choose Us</motion.p>
-            <motion.h2 variants={fadeUp} custom={1} className="text-3xl md:text-5xl font-display font-bold text-foreground mb-4">
-              Safari, <span className="italic text-primary">Reimagined</span>
+            <motion.p variants={fadeUp} custom={0} className="text-safari-gold font-semibold tracking-[0.25em] uppercase text-xs mb-3">
+              The Jude Safaris Standard
+            </motion.p>
+            <motion.h2 variants={fadeUp} custom={1} className="text-3xl md:text-5xl font-display font-bold text-white mb-4">
+              Executive Comfort Meets <span className="italic text-safari-gold">Savannah Majesty</span>
             </motion.h2>
-            <motion.p variants={fadeUp} custom={2} className="text-muted-foreground max-w-2xl mx-auto text-lg">
-              We don't just show you Africa — we immerse you in it. Every journey is crafted with care, expertise, and a deep respect for nature.
+            <motion.p variants={fadeUp} custom={2} className="text-safari-sand/80 max-w-2xl mx-auto text-base md:text-lg leading-relaxed">
+              We took Kenya’s world-famous Nganya vehicle craftsmanship and reimagined it into the most comfortable, tech-enabled safari cruiser on African roads.
             </motion.p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
-              { icon: Compass, title: "Expert Local Guides", desc: "Born and raised in East Africa, our guides bring decades of wildlife knowledge and cultural insight." },
-              { icon: Shield, title: "Sustainable Travel", desc: "We partner with conservation projects and community initiatives to ensure tourism benefits everyone." },
-              { icon: Users, title: "Tailored Experiences", desc: "No cookie-cutter trips. Every safari is designed around your interests, pace, and budget." },
+              {
+                icon: Volume2,
+                title: "Custom Acoustic & VIP Seating",
+                desc: "High-density leather captain's chairs, on-board Wi-Fi, USB-C rapid charging ports, and studio-grade sound for scenic journey playlists.",
+              },
+              {
+                icon: Compass,
+                title: "Master Kenyan Field Trackers",
+                desc: "Every driver-guide has deep generational roots in the Maasai Mara, Samburu, and Tsavo reserves with elite wildlife spotting abilities.",
+              },
+              {
+                icon: Shield,
+                title: "Ethical & Direct Community Impact",
+                desc: "Direct support to indigenous conservancies, clean drinking water initiatives, and local artisan craft cooperatives.",
+              },
             ].map((item, i) => (
               <motion.div
                 key={item.title}
@@ -352,32 +401,34 @@ const Index = () => {
                 viewport={{ once: true }}
                 variants={fadeUp}
                 custom={i}
-                className="bg-card rounded-xl p-8 text-center hover:shadow-lg transition-shadow border border-border"
+                className="bg-safari-warm-brown/30 rounded-2xl p-8 text-center hover:border-safari-gold/40 border border-safari-gold/15 transition-all duration-300 hover:shadow-2xl hover:shadow-safari-gold/5"
               >
-                <div className="w-14 h-14 mx-auto mb-5 rounded-full bg-primary/10 flex items-center justify-center">
-                  <item.icon className="w-7 h-7 text-primary" />
+                <div className="w-14 h-14 mx-auto mb-5 rounded-xl bg-safari-gold/15 flex items-center justify-center text-safari-gold border border-safari-gold/30">
+                  <item.icon className="w-7 h-7" />
                 </div>
-                <h3 className="text-xl font-display font-semibold mb-3">{item.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{item.desc}</p>
+                <h3 className="text-xl font-display font-bold text-white mb-3">{item.title}</h3>
+                <p className="text-safari-sand/70 leading-relaxed text-sm">{item.desc}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Featured Destinations */}
-      <section className="py-20 bg-muted">
+      {/* Featured Kenya Destinations */}
+      <section className="py-24 bg-black/40 border-t border-safari-gold/15">
         <div className="container mx-auto px-4">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="flex flex-col md:flex-row md:items-end justify-between mb-12">
             <div>
-              <motion.p variants={fadeUp} custom={0} className="text-primary font-medium tracking-[0.2em] uppercase text-sm mb-3">Destinations</motion.p>
-              <motion.h2 variants={fadeUp} custom={1} className="text-3xl md:text-5xl font-display font-bold text-foreground">
-                Iconic <span className="italic text-primary">Wild Places</span>
+              <motion.p variants={fadeUp} custom={0} className="text-safari-gold font-semibold tracking-[0.25em] uppercase text-xs mb-3">
+                Premier Wilderness Circuits
+              </motion.p>
+              <motion.h2 variants={fadeUp} custom={1} className="text-3xl md:text-5xl font-display font-bold text-white">
+                Iconic <span className="italic text-safari-gold">Kenyan Lands</span>
               </motion.h2>
             </div>
             <motion.div variants={fadeUp} custom={2}>
-              <Link to="/destinations" className="text-primary font-medium flex items-center gap-1 hover:gap-2 transition-all mt-4 md:mt-0">
-                View All Destinations <ChevronRight className="w-4 h-4" />
+              <Link to="/destinations" className="text-safari-gold font-semibold flex items-center gap-1 hover:gap-2 transition-all mt-4 md:mt-0 text-sm">
+                View All Kenyan Circuits <ChevronRight className="w-4 h-4" />
               </Link>
             </motion.div>
           </motion.div>
@@ -385,28 +436,28 @@ const Index = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {iconicDestinations.map((dest, i) => (
               <motion.div
-                key={dest.id || dest.name}
+                key={dest.name}
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
                 variants={fadeUp}
                 custom={i}
               >
-                <Link to="/destinations" className="group block relative rounded-xl overflow-hidden aspect-[4/3]">
+                <Link to="/destinations" className="group block relative rounded-2xl overflow-hidden aspect-[4/3] border border-safari-gold/15 hover:border-safari-gold/40 transition-all">
                   <img
                     src={dest.image}
                     alt={dest.name}
                     onError={withImageFallback}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-safari-charcoal/80 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-6">
-                    <div className="flex items-center gap-2 text-safari-gold text-sm mb-1">
-                      <MapPin className="w-3 h-3" />
-                      {dest.country}
+                    <div className="flex items-center gap-2 text-safari-gold text-xs font-semibold uppercase tracking-wider mb-1">
+                      <MapPin className="w-3.5 h-3.5" />
+                      {dest.county}
                     </div>
-                    <h3 className="text-xl font-display font-bold text-safari-cream">{dest.name}</h3>
-                    <p className="text-safari-sand/80 text-sm mt-1">{dest.desc}</p>
+                    <h3 className="text-xl font-display font-bold text-white group-hover:text-safari-gold transition-colors">{dest.name}</h3>
+                    <p className="text-safari-sand/80 text-xs mt-1.5 line-clamp-2 leading-relaxed">{dest.desc}</p>
                   </div>
                 </Link>
               </motion.div>
@@ -416,15 +467,17 @@ const Index = () => {
       </section>
 
       {/* Safari Packages */}
-      <section className="py-20 bg-background">
+      <section className="py-24 bg-safari-charcoal border-t border-safari-gold/15">
         <div className="container mx-auto px-4">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-16">
-            <motion.p variants={fadeUp} custom={0} className="text-primary font-medium tracking-[0.2em] uppercase text-sm mb-3">Safari Packages</motion.p>
-            <motion.h2 variants={fadeUp} custom={1} className="text-3xl md:text-5xl font-display font-bold text-foreground mb-4">
-              Curated <span className="italic text-primary">Adventures</span>
+            <motion.p variants={fadeUp} custom={0} className="text-safari-gold font-semibold tracking-[0.25em] uppercase text-xs mb-3">
+              Tailored Itineraries
+            </motion.p>
+            <motion.h2 variants={fadeUp} custom={1} className="text-3xl md:text-5xl font-display font-bold text-white mb-4">
+              Curated <span className="italic text-safari-gold">Van Expeditions</span>
             </motion.h2>
-            <motion.p variants={fadeUp} custom={2} className="text-muted-foreground max-w-2xl mx-auto text-lg">
-              From classic game drives to exclusive gorilla treks, find the perfect safari for your dream African journey.
+            <motion.p variants={fadeUp} custom={2} className="text-safari-sand/80 max-w-2xl mx-auto text-base leading-relaxed">
+              Every expedition includes private executive van transport, experienced naturalist guide, park conservation fees, and hand-selected luxury lodges.
             </motion.p>
           </motion.div>
 
@@ -437,33 +490,33 @@ const Index = () => {
                 viewport={{ once: true }}
                 variants={fadeUp}
                 custom={i}
-                className="group bg-card rounded-xl overflow-hidden border border-border hover:shadow-xl transition-all"
+                className="group bg-safari-warm-brown/30 rounded-2xl overflow-hidden border border-safari-gold/15 hover:border-safari-gold/45 hover:shadow-2xl hover:shadow-safari-gold/5 transition-all flex flex-col"
               >
-                <div className="relative h-56 overflow-hidden">
+                <div className="relative h-60 overflow-hidden bg-black/40">
                   <img
                     src={pkg.image}
                     alt={pkg.name}
                     onError={withImageFallback}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
-                  <span className="absolute top-4 left-4 bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                  <span className="absolute top-4 left-4 bg-safari-gold text-safari-charcoal text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
                     {pkg.tag}
                   </span>
                 </div>
-                <div className="p-6">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-xl font-display font-bold">{pkg.name}</h3>
-                    <span className="text-primary font-bold">{pkg.price}</span>
+                <div className="p-6 flex flex-col flex-1">
+                  <div className="flex items-center justify-between mb-3 gap-2">
+                    <h3 className="text-xl font-display font-bold text-white group-hover:text-safari-gold transition-colors">{pkg.name}</h3>
+                    <span className="text-safari-gold font-display font-bold text-lg whitespace-nowrap">{pkg.price}</span>
                   </div>
-                  <p className="text-muted-foreground text-sm mb-4 leading-relaxed">{pkg.desc}</p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground flex items-center gap-1">
-                      <Calendar className="w-4 h-4" />
+                  <p className="text-safari-sand/70 text-sm mb-6 leading-relaxed flex-1">{pkg.desc}</p>
+                  <div className="flex items-center justify-between pt-4 border-t border-white/5">
+                    <span className="text-xs text-safari-sand/70 flex items-center gap-1.5">
+                      <Calendar className="w-4 h-4 text-safari-gold" />
                       {pkg.duration}
                     </span>
-                    <Link to="/contact">
-                      <Button size="sm" variant="outline" className="gap-1">
-                        Inquire <ArrowRight className="w-3 h-3" />
+                    <Link to="/booking">
+                      <Button size="sm" className="gap-1.5 bg-safari-gold text-safari-charcoal hover:bg-amber-400 font-bold rounded-xl">
+                        Book Van <ArrowRight className="w-3.5 h-3.5" />
                       </Button>
                     </Link>
                   </div>
@@ -474,7 +527,7 @@ const Index = () => {
 
           <div className="text-center mt-12">
             <Link to="/packages">
-              <Button size="lg" variant="outline" className="gap-2">
+              <Button size="lg" variant="outline" className="gap-2 border-safari-gold/40 text-safari-cream hover:bg-safari-gold hover:text-safari-charcoal font-bold rounded-xl px-8">
                 View All Packages <ArrowRight className="w-5 h-5" />
               </Button>
             </Link>
@@ -483,12 +536,14 @@ const Index = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 bg-safari-charcoal">
+      <section className="py-24 bg-black/50 border-t border-safari-gold/15">
         <div className="container mx-auto px-4">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-16">
-            <motion.p variants={fadeUp} custom={0} className="text-safari-gold font-medium tracking-[0.2em] uppercase text-sm mb-3">Testimonials</motion.p>
-            <motion.h2 variants={fadeUp} custom={1} className="text-3xl md:text-5xl font-display font-bold text-safari-cream mb-4">
-              Stories from the <span className="italic text-safari-gold">Wild</span>
+            <motion.p variants={fadeUp} custom={0} className="text-safari-gold font-semibold tracking-[0.25em] uppercase text-xs mb-3">
+              Guest Testimonials
+            </motion.p>
+            <motion.h2 variants={fadeUp} custom={1} className="text-3xl md:text-5xl font-display font-bold text-white mb-4">
+              Voices from the <span className="italic text-safari-gold">Trail</span>
             </motion.h2>
           </motion.div>
 
@@ -501,17 +556,17 @@ const Index = () => {
                 viewport={{ once: true }}
                 variants={fadeUp}
                 custom={i}
-                className="bg-safari-warm-brown/50 rounded-xl p-8 border border-safari-warm-brown"
+                className="bg-safari-warm-brown/30 rounded-2xl p-8 border border-safari-gold/15 hover:border-safari-gold/30 transition-all"
               >
                 <div className="flex gap-1 mb-4">
                   {Array.from({ length: t.rating }).map((_, j) => (
                     <Star key={j} className="w-4 h-4 fill-safari-gold text-safari-gold" />
                   ))}
                 </div>
-                <p className="text-safari-sand/90 leading-relaxed mb-6 italic">"{t.text}"</p>
+                <p className="text-safari-sand/90 leading-relaxed mb-6 italic text-sm">"{t.text}"</p>
                 <div>
-                  <p className="font-display font-semibold text-safari-cream">{t.name}</p>
-                  <p className="text-sm text-safari-sand/60">{t.location}</p>
+                  <p className="font-display font-bold text-white">{t.name}</p>
+                  <p className="text-xs text-safari-sand/60">{t.location}</p>
                 </div>
               </motion.div>
             ))}
@@ -519,29 +574,32 @@ const Index = () => {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="relative py-24 overflow-hidden">
+      {/* Final Call to Action */}
+      <section className="relative py-28 overflow-hidden border-t border-safari-gold/20">
         <div className="absolute inset-0">
-          <img src={balloonImg} alt="Balloon safari" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-safari-charcoal/70" />
+          <img src={balloonImg} alt="Masai Mara Dawn" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-black/60" />
         </div>
-        <div className="relative z-10 container mx-auto px-4 text-center">
+        <div className="relative z-10 container mx-auto px-4 text-center max-w-3xl">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <motion.h2 variants={fadeUp} custom={0} className="text-3xl md:text-5xl font-display font-bold text-safari-cream mb-6">
-              Ready for Your African <span className="italic text-safari-gold">Adventure?</span>
+            <span className="inline-block text-xs uppercase tracking-[0.25em] text-safari-gold font-bold mb-4">
+              Ready for Your Kenyan Expedition?
+            </span>
+            <motion.h2 variants={fadeUp} custom={0} className="text-3xl md:text-6xl font-display font-extrabold text-white mb-6 leading-tight">
+              Let's Hit the Savannah in <span className="italic text-safari-gold">Executive Style</span>
             </motion.h2>
-            <motion.p variants={fadeUp} custom={1} className="text-safari-sand/90 text-lg max-w-xl mx-auto mb-8">
-              Let us craft your perfect safari. Tell us your dream, and we'll make it happen.
+            <motion.p variants={fadeUp} custom={1} className="text-safari-sand/90 text-base md:text-lg max-w-xl mx-auto mb-10 leading-relaxed font-light">
+              Our executive Nganya vans are serviced, polished, and ready. Contact our Nairobi concierge desk for bespoke circuit planning.
             </motion.p>
-            <motion.div variants={fadeUp} custom={2} className="flex flex-row gap-4 justify-center">
-              <Link to="/contact">
-                <Button size="lg" className="text-base px-8 py-6 gap-2">
-                  Start Planning <ArrowRight className="w-5 h-5" />
+            <motion.div variants={fadeUp} custom={2} className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link to="/booking">
+                <Button size="lg" className="text-base px-8 py-6 gap-2 bg-safari-gold text-safari-charcoal hover:bg-amber-400 font-extrabold rounded-xl shadow-xl shadow-safari-gold/20">
+                  Book Your Van <ArrowRight className="w-5 h-5" />
                 </Button>
               </Link>
-              <a href="https://wa.me/254713241666" target="_blank" rel="noopener noreferrer">
-                <Button size="lg" variant="outline" className="text-base px-8 py-6 border-safari-cream text-safari-cream bg-transparent hover:bg-safari-cream hover:text-safari-charcoal">
-                  WhatsApp Us
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+                <Button size="lg" variant="outline" className="text-base px-8 py-6 border-emerald-500/50 text-emerald-400 bg-emerald-950/40 hover:bg-emerald-600 hover:text-white rounded-xl backdrop-blur-sm transition-all">
+                  Chat on WhatsApp ({PHONE_DISPLAY})
                 </Button>
               </a>
             </motion.div>

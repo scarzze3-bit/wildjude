@@ -1,6 +1,12 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
   <head>
+    <script>
+      // Automatic safety redirect if opened via Live Server extension (port 5500)
+      if (window.location.port === '5500') {
+        window.location.href = 'http://' + window.location.hostname + ':8081' + window.location.pathname;
+      }
+    </script>
     <meta charset="UTF-8" />
     <script>
       (function() {
@@ -14,25 +20,55 @@
       })();
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>WildWave Safaris | East Africa's Premier Safari Company</title>
-    <meta name="description" content="Handcrafted safari experiences across Kenya, Tanzania, Uganda and Rwanda." />
-    <meta name="author" content="WildWave Safaris" />
+    <title>Jude Safaris & Adventures | Premium Kenyan Expeditions</title>
+    <meta name="description" content="Experience Kenya's finest circuits in luxury safari vans. Lake Victoria, Homa Bay, Baringo, Mombasa Coast, and the Northern Frontier. Book with Jude Safaris & Adventures." />
+    <meta name="author" content="Jude Safaris & Adventures" />
     <meta name="robots" content="index, follow" />
+    <meta name="keywords" content="Kenya safari, Jude Safaris, Lake Victoria tour, Samburu, Mombasa, luxury safari van, Nganya safari, book Kenya tour" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="canonical" href="https://wildwavesafari.tours/" />
+    <link rel="canonical" href="https://judesafaris.co.ke/" />
 
-    <meta property="og:site_name" content="WildWave Safaris" />
-    <meta property="og:title" content="WildWave Safaris | East Africa's Premier Safari Company" />
-    <meta property="og:description" content="Handcrafted safari experiences across Kenya, Tanzania, Uganda and Rwanda." />
+    <!-- DNS prefetch for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://images.unsplash.com" />
+
+    <!-- Open Graph -->
+    <meta property="og:site_name" content="Jude Safaris & Adventures" />
+    <meta property="og:title" content="Jude Safaris & Adventures | Premium Kenyan Expeditions" />
+    <meta property="og:description" content="Experience Kenya's finest circuits in luxury safari vans. Where the Nganya meets the Wild." />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://wildwavesafari.tours/" />
+    <meta property="og:url" content="https://judesafaris.co.ke/" />
     <meta property="og:image" content="https://www.dropbox.com/scl/fi/hx1jqsxef1zz940ibzktk/wb.jpeg?rlkey=teccg3icp4p289k6q3g5w65w2&st=euyvj5ja&raw=1" />
+    <meta property="og:locale" content="en_KE" />
 
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="WildWave Safaris | East Africa's Premier Safari Company" />
-    <meta name="twitter:description" content="Handcrafted safari experiences across Kenya, Tanzania, Uganda and Rwanda." />
+    <meta name="twitter:site" content="@judesafaris" />
+    <meta name="twitter:title" content="Jude Safaris & Adventures | Premium Kenyan Expeditions" />
+    <meta name="twitter:description" content="Experience Kenya's finest circuits in luxury safari vans. Where the Nganya meets the Wild." />
     <meta name="twitter:image" content="https://www.dropbox.com/scl/fi/hx1jqsxef1zz940ibzktk/wb.jpeg?rlkey=teccg3icp4p289k6q3g5w65w2&st=euyvj5ja&raw=1" />
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TouristInformationCenter",
+      "name": "Jude Safaris & Adventures",
+      "description": "Premium Kenyan safari expeditions in luxury custom vans",
+      "url": "https://judesafaris.co.ke",
+      "telephone": "+254422832791",
+      "email": "blackjudecatie5913@gmail.com",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Nairobi",
+        "addressCountry": "KE"
+      },
+      "areaServed": "Kenya",
+      "priceRange": "KES 24,000 - KES 55,000"
+    }
+    </script>
   </head>
 
   <body>

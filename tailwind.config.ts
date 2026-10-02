@@ -1,4 +1,4 @@
-import type { Config } from "tailwindcss";
+﻿import type { Config } from "tailwindcss";
 import tailwindcssAnimate from "tailwindcss-animate";
 
 export default {
@@ -9,14 +9,13 @@ export default {
     container: {
       center: true,
       padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
+      screens: { "2xl": "1400px" },
     },
     extend: {
       fontFamily: {
-        display: ['Playfair Display', 'serif'],
-        body: ['DM Sans', 'sans-serif'],
+        display: ["Playfair Display", "Georgia", "serif"],
+        body: ["DM Sans", "system-ui", "sans-serif"],
+        price: ["Outfit", "system-ui", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -54,12 +53,18 @@ export default {
         },
         safari: {
           gold: "hsl(var(--safari-gold))",
+          "gold-deep": "hsl(var(--safari-gold-deep))",
+          emerald: "hsl(var(--safari-emerald))",
           terracotta: "hsl(var(--safari-terracotta))",
+          rust: "hsl(var(--safari-rust))",
           olive: "hsl(var(--safari-olive))",
           sand: "hsl(var(--safari-sand))",
           cream: "hsl(var(--safari-cream))",
           charcoal: "hsl(var(--safari-charcoal))",
+          obsidian: "hsl(var(--safari-obsidian))",
+          stone: "hsl(var(--safari-stone))",
           "warm-brown": "hsl(var(--safari-warm-brown))",
+          mpesa: "hsl(var(--safari-mpesa))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
@@ -76,6 +81,8 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        "2xl": "1.25rem",
+        "3xl": "1.5rem",
       },
       keyframes: {
         "accordion-down": {
@@ -87,19 +94,26 @@ export default {
           to: { height: "0" },
         },
         "fade-up": {
-          "0%": { opacity: "0", transform: "translateY(30px)" },
+          "0%": { opacity: "0", transform: "translateY(24px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
-        "fade-in": {
-          "0%": { opacity: "0" },
-          "100%": { opacity: "1" },
+        "fade-in": { "0%": { opacity: "0" }, "100%": { opacity: "1" } },
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-8px)" },
+        },
+        "pulse-gold": {
+          "0%, 100%": { boxShadow: "0 0 0 0 hsl(42 95% 52% / 0.4)" },
+          "50%": { boxShadow: "0 0 0 12px hsl(42 95% 52% / 0)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "fade-up": "fade-up 0.8s ease-out forwards",
-        "fade-in": "fade-in 0.6s ease-out forwards",
+        "fade-up": "fade-up 0.7s ease-out forwards",
+        "fade-in": "fade-in 0.5s ease-out forwards",
+        float: "float 4s ease-in-out infinite",
+        "pulse-gold": "pulse-gold 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
       },
     },
   },

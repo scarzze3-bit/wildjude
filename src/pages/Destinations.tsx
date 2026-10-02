@@ -1,165 +1,83 @@
-import { useState, useEffect } from "react";
+﻿import { useState } from "react";
 import { motion } from "framer-motion";
-import { MapPin, Filter, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { MapPin, Calendar, ChevronRight, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
-import { API_BASE_URL } from "@/lib/api";
-import { toImageSrc, withImageFallback } from "@/lib/images";
 import { useSEO } from "@/hooks/use-seo";
-
-type DestinationResponse = {
-  id: number;
-  name: string;
-  country?: string | null;
-  category?: string | null;
-  tags?: string | null;
-  image_url?: string | null;
-  description?: string | null;
-  best_months?: string | null;
-};
-
-type DestinationCard = {
-  id: number;
-  name: string;
-  country: string;
-  region: string;
-  category: string[];
-  image: string;
-  desc: string;
-  bestMonths: string;
-};
-
-const regions = ["All", "Kenya", "Tanzania", "Uganda", "Rwanda"];
-const categories = ["All", "Luxury", "Budget", "Photo Safaris", "Family Safaris"];
-const countryOrder = ["Kenya", "Tanzania", "Uganda", "Rwanda"];
+import { KENYA_CIRCUITS, DESTINATION_REGIONS, DESTINATION_TAGS, DESTINATION_IMAGES, KenyaCircuit } from "@/features/destinations/data";
+import { WHATSAPP_MESSAGE } from "@/lib/brand";
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 24 },
   visible: (i: number) => ({
     opacity: 1, y: 0,
-    transition: { delay: i * 0.08, duration: 0.5, ease: "easeOut" as const },
+    transition: { delay: i * 0.07, duration: 0.45, ease: "easeOut" },
   }),
 };
 
 const Destinations = () => {
   useSEO({
-    title: "Safari Destinations in East Africa | WildWave Safaris",
+    title: "Kenya Safari Destinations | Jude Safaris & Adventures",
     description:
-      "Explore iconic safari destinations across Kenya, Tanzania, Uganda, and Rwanda with expert planning from WildWave Safaris.",
+      "Explore curated Kenyan circuits: Lake Victoria, Homa Bay, Baringo, Mombasa Coast, and the Northern Frontier with Jude Safaris luxury vans.",
     path: "/destinations",
-    keywords: ["Masai Mara", "Serengeti", "Ngorongoro", "Bwindi", "East Africa destinations"],
+    keywords: ["Kenya safari destinations", "Lake Victoria safari", "Samburu", "Mombasa tours", "Baringo hot springs"],
   });
 
   const [activeRegion, setActiveRegion] = useState("All");
-  const [activeCategory, setActiveCategory] = useState("All");
-  const [allDestinations, setAllDestinations] = useState<DestinationCard[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [activeTag, setActiveTag] = useState("All");
 
-  useEffect(() => {
-    fetchDestinations();
-  }, []);
-
-  const fetchDestinations = async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/public/destinations`);
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: Failed to fetch destinations`);
-      }
-      const data = await response.json();
-
-      // Transform and de-duplicate API data so repeated seed rows don't appear twice.
-      const transformed = (data as DestinationResponse[]).map((dest) => ({
-        id: dest.id,
-        name: dest.name,
-        country: dest.country || dest.category,
-        region: dest.category,
-        category: dest.tags ? dest.tags.split(',').map((t: string) => t.trim()) : ['Luxury'],
-        image: toImageSrc(dest.image_url),
-        desc: dest.description,
-        bestMonths: dest.best_months || 'Year-round'
-      }));
-
-      const deduped = transformed.filter((dest, index, arr) => {
-        const key = `${dest.name}::${dest.country}::${dest.image}`;
-        return index === arr.findIndex((item) => `${item.name}::${item.country}::${item.image}` === key);
-      });
-
-      setAllDestinations(deduped);
-    } catch (error) {
-      console.error('Failed to fetch destinations:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const filtered = allDestinations
-    .filter((d) => {
-      const regionMatch = activeRegion === "All" || d.region === activeRegion;
-      const catMatch = activeCategory === "All" || d.category.includes(activeCategory);
-      return regionMatch && catMatch;
-    })
-    .sort((a, b) => {
-      const aIdx = countryOrder.indexOf(a.country);
-      const bIdx = countryOrder.indexOf(b.country);
-      const aRank = aIdx === -1 ? Number.MAX_SAFE_INTEGER : aIdx;
-      const bRank = bIdx === -1 ? Number.MAX_SAFE_INTEGER : bIdx;
-
-      if (aRank !== bRank) return aRank - bRank;
-      return a.name.localeCompare(b.name);
-    });
+  const filtered = KENYA_CIRCUITS.filter((d) => {
+    const regionMatch = activeRegion === "All" || d.region === activeRegion;
+    const tagMatch = activeTag === "All" || d.tags.some((t) => t === activeTag);
+    return regionMatch && tagMatch;
+  });
 
   return (
-    <div className="min-h-screen pt-24">
-      {/* Header */}
-      <section className="py-16 bg-muted">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-primary font-medium tracking-[0.2em] uppercase text-sm mb-3">Explore East Africa</p>
-          <h1 className="text-4xl md:text-6xl font-display font-bold text-foreground mb-4">
-            Our <span className="italic text-primary">Destinations</span>
-          </h1>
-          <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-            From vast savannas to misty mountains and turquoise coastlines — discover the diversity of East Africa.
-          </p>
+    <div className="min-h-screen">
+      {/* Hero */}
+      <section className="relative py-32 pt-40 overflow-hidden bg-safari-charcoal">
+        <div className="absolute inset-0 opacity-20"
+          style={{ backgroundImage: "url(https://images.unsplash.com/photo-1518982380512-5a3c6f6f5218?w=1600)", backgroundSize: "cover", backgroundPosition: "center" }} />
+        <div className="absolute inset-0 bg-gradient-to-b from-safari-charcoal/60 via-safari-charcoal/80 to-safari-charcoal" />
+        <div className="relative container mx-auto px-4 text-center">
+          <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="label-safari mb-4">
+            Kenyan Circuits
+          </motion.p>
+          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+            className="text-4xl md:text-6xl font-display font-bold text-safari-cream mb-5">
+            Our <span className="italic text-gradient-gold">Destinations</span>
+          </motion.h1>
+          <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+            className="text-safari-sand/80 max-w-2xl mx-auto text-lg leading-relaxed">
+            Five curated Kenyan circuits — each with its own pulse, its own story.
+            Driven in custom luxury Nganya vans built for the wild.
+          </motion.p>
         </div>
       </section>
 
       {/* Filters */}
-      <section className="py-8 border-b border-border bg-background sticky top-16 z-30">
+      <section className="py-6 border-b border-border bg-background/95 backdrop-blur-sm sticky top-16 z-30">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row gap-4 md:items-center">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Filter className="w-4 h-4" />
-              <span className="font-medium">Filter:</span>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <span className="text-sm font-medium text-foreground mr-2">Region:</span>
-              {regions.map((r) => (
-                <button
-                  key={r}
-                  onClick={() => setActiveRegion(r)}
-                  className={`px-3 py-1 rounded-full text-sm font-medium transition-all ${
-                    activeRegion === r
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted text-muted-foreground hover:bg-primary/10"
-                  }`}
-                >
+            <div className="flex flex-wrap gap-2 items-center">
+              <span className="text-xs font-semibold tracking-widest uppercase text-muted-foreground mr-1">Region:</span>
+              {DESTINATION_REGIONS.map((r) => (
+                <button key={r} onClick={() => setActiveRegion(r)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${
+                    activeRegion === r ? "bg-safari-gold text-safari-charcoal shadow-md" : "bg-muted text-muted-foreground hover:bg-safari-gold/10 hover:text-safari-gold"
+                  }`}>
                   {r}
                 </button>
               ))}
             </div>
-            <div className="flex flex-wrap gap-2">
-              <span className="text-sm font-medium text-foreground mr-2">Type:</span>
-              {categories.map((c) => (
-                <button
-                  key={c}
-                  onClick={() => setActiveCategory(c)}
-                  className={`px-3 py-1 rounded-full text-sm font-medium transition-all ${
-                    activeCategory === c
-                      ? "bg-accent text-accent-foreground"
-                      : "bg-muted text-muted-foreground hover:bg-accent/10"
-                  }`}
-                >
-                  {c}
+            <div className="flex flex-wrap gap-2 items-center">
+              <span className="text-xs font-semibold tracking-widest uppercase text-muted-foreground mr-1">Type:</span>
+              {DESTINATION_TAGS.map((t) => (
+                <button key={t} onClick={() => setActiveTag(t)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${
+                    activeTag === t ? "bg-safari-emerald text-white shadow-md" : "bg-muted text-muted-foreground hover:bg-safari-emerald/10 hover:text-safari-emerald"
+                  }`}>
+                  {t}
                 </button>
               ))}
             </div>
@@ -170,52 +88,102 @@ const Destinations = () => {
       {/* Grid */}
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
-          {loading ? (
-            <p className="text-center text-muted-foreground py-12">Loading destinations...</p>
-          ) : filtered.length === 0 ? (
-            <p className="text-center text-muted-foreground py-12">No destinations match your filters. Try adjusting.</p>
+          {filtered.length === 0 ? (
+            <div className="text-center py-20">
+              <Sparkles className="w-10 h-10 text-safari-gold/40 mx-auto mb-4" />
+              <p className="text-muted-foreground text-lg">No destinations match. Try clearing your filters.</p>
+            </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filtered.map((dest, i) => (
-                <motion.div
-                  key={dest.id || dest.name}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filtered.map((dest: KenyaCircuit, i) => (
+                <motion.article
+                  key={dest.id}
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true }}
                   variants={fadeUp}
                   custom={i}
-                  className="group relative rounded-xl overflow-hidden border border-border hover:shadow-xl transition-all h-80"
+                  className="group relative rounded-2xl overflow-hidden border border-border hover:border-safari-gold/40 hover:shadow-2xl hover:shadow-safari-gold/10 transition-all duration-500 h-[420px] flex flex-col"
                 >
-                  <img
-                    src={dest.image}
-                    alt={dest.name}
-                    onError={withImageFallback}
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-safari-charcoal/90 via-safari-charcoal/40 to-transparent" />
-                  <div className="absolute top-4 left-4 flex gap-2 z-10">
-                    {dest.category.map((cat) => (
-                      <span key={cat} className="bg-safari-charcoal/70 text-safari-cream text-xs px-2 py-1 rounded-full backdrop-blur-sm">{cat}</span>
+                  {/* Image */}
+                  <div className="absolute inset-0">
+                    <img
+                      src={DESTINATION_IMAGES[dest.id] || "https://images.unsplash.com/photo-1501854140801-50d01698950b?w=800"}
+                      alt={dest.name}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-safari-charcoal via-safari-charcoal/40 to-transparent" />
+                  </div>
+
+                  {/* Tags */}
+                  <div className="relative z-10 flex flex-wrap gap-2 p-5">
+                    {dest.tags.slice(0, 2).map((tag) => (
+                      <span key={tag} className="bg-safari-charcoal/60 backdrop-blur-sm text-safari-cream text-[10px] px-2.5 py-1 rounded-full font-medium border border-white/10">
+                        {tag}
+                      </span>
                     ))}
                   </div>
-                  <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
-                    <div className="flex items-center gap-2 text-safari-gold text-sm mb-2">
+
+                  {/* Bottom Content */}
+                  <div className="relative z-10 mt-auto p-6">
+                    <div className="flex items-center gap-2 text-safari-gold text-xs mb-2">
                       <MapPin className="w-3 h-3" />
-                      {dest.country}
+                      <span className="font-medium">{dest.county}, Kenya</span>
                     </div>
-                    <h3 className="text-xl font-display font-bold text-safari-cream mb-2">{dest.name}</h3>
-                    <p className="text-safari-sand/90 text-sm mb-3">{dest.desc}</p>
+                    <h2 className="text-2xl font-display font-bold text-safari-cream mb-2 group-hover:text-safari-gold transition-colors">
+                      {dest.name}
+                    </h2>
+                    <p className="text-safari-sand/80 text-sm mb-3 leading-relaxed">{dest.tagline}</p>
+                    <p className="text-safari-sand/60 text-xs italic mb-4 font-display line-clamp-2">
+                      "{dest.culturalQuote}"
+                    </p>
+
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-safari-sand/70">Best: {dest.bestMonths}</span>
-                      <Link to="/contact" className="text-safari-gold text-sm font-medium flex items-center gap-1 hover:gap-2 transition-all">
-                        Details <ChevronRight className="w-3 h-3" />
-                      </Link>
+                      <div>
+                        <div className="flex items-center gap-1.5 text-safari-sand/70 text-xs">
+                          <Calendar className="w-3 h-3" />
+                          {dest.bestMonths}
+                        </div>
+                        <div className="text-safari-gold font-price font-bold text-base mt-1">
+                          From KES {dest.priceFrom.toLocaleString()}
+                        </div>
+                      </div>
+                      <a
+                        href={WHATSAPP_MESSAGE(dest.name)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1.5 text-safari-gold text-sm font-semibold hover:text-safari-cream transition-colors group/cta"
+                      >
+                        Book Now
+                        <ChevronRight className="w-4 h-4 group-hover/cta:translate-x-0.5 transition-transform" />
+                      </a>
                     </div>
                   </div>
-                </motion.div>
+                </motion.article>
               ))}
             </div>
           )}
+        </div>
+      </section>
+
+      {/* Highlights Banner */}
+      <section className="py-16 bg-safari-charcoal">
+        <div className="container mx-auto px-4 text-center">
+          <p className="label-safari mb-4">Every Circuit Includes</p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-8">
+            {[
+              { label: "Custom Nganya Van", icon: "🚐" },
+              { label: "Expert Guide", icon: "🧭" },
+              { label: "Cultural Immersion", icon: "🎭" },
+              { label: "Flexible Itinerary", icon: "📍" },
+            ].map((item) => (
+              <div key={item.label} className="flex flex-col items-center gap-3 p-6 rounded-2xl border border-safari-warm-brown/40 hover:border-safari-gold/40 transition-colors">
+                <span className="text-3xl">{item.icon}</span>
+                <span className="text-safari-sand/80 text-sm font-medium">{item.label}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     </div>

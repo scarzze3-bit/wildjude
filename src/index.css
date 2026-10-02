@@ -1,51 +1,63 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Outfit:wght@400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ================================================================
+   JUDE SAFARIS & ADVENTURES — Design System v2.0
+   Theme: Dark Luxury x Kenyan Earth Warmth x Nganya Soul
+   ================================================================ */
+
 @layer base {
   :root {
+    /* ── Core Surfaces ── */
     --background: 40 33% 97%;
-    --foreground: 20 20% 15%;
-
-    --card: 40 30% 95%;
-    --card-foreground: 20 20% 15%;
-
+    --foreground: 20 20% 12%;
+    --card: 40 28% 94%;
+    --card-foreground: 20 20% 12%;
     --popover: 40 33% 97%;
-    --popover-foreground: 20 20% 15%;
+    --popover-foreground: 20 20% 12%;
 
-    --primary: 25 70% 45%;
-    --primary-foreground: 40 33% 97%;
+    /* ── Gold Primary ── */
+    --primary: 42 92% 50%;
+    --primary-foreground: 20 20% 8%;
 
-    --secondary: 45 60% 70%;
-    --secondary-foreground: 20 20% 15%;
+    /* ── Emerald Secondary ── */
+    --secondary: 158 60% 28%;
+    --secondary-foreground: 40 33% 97%;
 
-    --muted: 35 20% 90%;
+    /* ── Muted / Surfaces ── */
+    --muted: 35 18% 90%;
     --muted-foreground: 20 10% 45%;
-
-    --accent: 140 30% 35%;
+    --accent: 12 68% 50%;
     --accent-foreground: 40 33% 97%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
+    --border: 35 18% 84%;
+    --input: 35 18% 84%;
+    --ring: 42 92% 50%;
+    --radius: 0.625rem;
 
-    --border: 35 20% 85%;
-    --input: 35 20% 85%;
-    --ring: 25 70% 45%;
+    /* ── Brand Palette ── */
+    --safari-gold:       42 95% 52%;
+    --safari-gold-deep:  38 90% 38%;
+    --safari-emerald:    158 64% 32%;
+    --safari-terracotta: 12 72% 52%;
+    --safari-rust:       18 65% 42%;
+    --safari-olive:      85 25% 40%;
+    --safari-sand:       38 42% 82%;
+    --safari-cream:      40 33% 96%;
+    --safari-charcoal:   20 18% 12%;
+    --safari-obsidian:   20 16% 7%;
+    --safari-stone:      28 22% 22%;
+    --safari-warm-brown: 25 38% 28%;
+    --safari-mpesa:      134 62% 40%;
 
-    --radius: 0.5rem;
-
-    --safari-gold: 42 85% 55%;
-    --safari-terracotta: 15 65% 50%;
-    --safari-olive: 85 25% 40%;
-    --safari-sand: 40 40% 88%;
-    --safari-cream: 40 33% 97%;
-    --safari-charcoal: 20 20% 15%;
-    --safari-warm-brown: 25 40% 30%;
-
-    --font-display: 'Playfair Display', serif;
-    --font-body: 'DM Sans', sans-serif;
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+    --font-price: 'Outfit', system-ui, sans-serif;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -58,25 +70,30 @@
   }
 
   .dark {
-    --background: 20 20% 8%;
-    --foreground: 40 20% 90%;
-    --card: 20 20% 12%;
-    --card-foreground: 40 20% 90%;
-    --popover: 20 20% 12%;
-    --popover-foreground: 40 20% 90%;
-    --primary: 25 70% 50%;
-    --primary-foreground: 40 33% 97%;
-    --secondary: 45 40% 25%;
-    --secondary-foreground: 40 20% 90%;
-    --muted: 20 15% 18%;
-    --muted-foreground: 35 15% 60%;
-    --accent: 140 25% 30%;
-    --accent-foreground: 40 20% 90%;
-    --destructive: 0 62.8% 30.6%;
+    /* ── Deep Dark Theme (Default for premium feel) ── */
+    --background: 20 18% 7%;
+    --foreground: 38 28% 88%;
+    --card: 20 18% 11%;
+    --card-foreground: 38 28% 88%;
+    --popover: 20 18% 10%;
+    --popover-foreground: 38 28% 88%;
+
+    --primary: 42 92% 52%;
+    --primary-foreground: 20 18% 7%;
+    --secondary: 158 55% 28%;
+    --secondary-foreground: 38 28% 88%;
+
+    --muted: 20 14% 17%;
+    --muted-foreground: 35 14% 58%;
+    --accent: 12 68% 48%;
+    --accent-foreground: 38 28% 88%;
+
+    --destructive: 0 62% 30%;
     --destructive-foreground: 210 40% 98%;
-    --border: 20 15% 20%;
-    --input: 20 15% 20%;
-    --ring: 25 70% 50%;
+    --border: 20 14% 20%;
+    --input: 20 14% 20%;
+    --ring: 42 92% 52%;
+
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -93,38 +110,172 @@
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
     font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
+    letter-spacing: -0.01em;
   }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: hsl(var(--background)); }
+  ::-webkit-scrollbar-thumb { background: hsl(var(--safari-warm-brown)); border-radius: 999px; }
+  ::-webkit-scrollbar-thumb:hover { background: hsl(var(--safari-gold)); }
+
+  /* Focus visible */
+  :focus-visible { outline: 2px solid hsl(var(--safari-gold)); outline-offset: 3px; }
+
+  /* Selection */
+  ::selection { background: hsl(var(--safari-gold) / 0.3); color: hsl(var(--foreground)); }
 }
 
+/* ── Typography utilities ── */
 @layer utilities {
-  .text-display {
-    font-family: var(--font-display);
+  .text-display { font-family: var(--font-display); }
+  .text-body { font-family: var(--font-body); }
+  .text-price { font-family: var(--font-price); font-feature-settings: "tnum"; }
+
+  /* ── Gold gradient text ── */
+  .text-gradient-gold {
+    background: linear-gradient(135deg, hsl(46 100% 62%) 0%, hsl(42 95% 52%) 50%, hsl(38 90% 38%) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
-  .text-body {
+
+  /* ── Nganya kinetic label ── */
+  .label-safari {
+    @apply text-xs font-semibold tracking-[0.22em] uppercase;
     font-family: var(--font-body);
+    color: hsl(var(--safari-gold));
   }
+
+  /* ── Glassmorphism card ── */
+  .glass-card {
+    background: hsl(var(--card) / 0.7);
+    backdrop-filter: blur(12px) saturate(1.4);
+    border: 1px solid hsl(var(--border) / 0.5);
+  }
+
+  /* ── Dark glass ── */
+  .glass-dark {
+    background: hsl(20 18% 7% / 0.75);
+    backdrop-filter: blur(16px) saturate(1.2);
+    border: 1px solid hsl(var(--safari-warm-brown) / 0.4);
+  }
+
+  /* ── Gold border glow ── */
+  .glow-gold {
+    box-shadow: 0 0 24px hsl(var(--safari-gold) / 0.25), 0 0 48px hsl(var(--safari-gold) / 0.1);
+  }
+
+  /* ── Emerald glow ── */
+  .glow-emerald {
+    box-shadow: 0 0 20px hsl(var(--safari-emerald) / 0.3);
+  }
+
+  /* ── M-Pesa green ── */
+  .mpesa-green { color: hsl(var(--safari-mpesa)); }
+  .bg-mpesa { background: hsl(var(--safari-mpesa)); }
 }
 
+/* ── Animations ── */
 @keyframes scroll {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes pulse-gold {
+  0%, 100% { box-shadow: 0 0 0 0 hsl(42 95% 52% / 0.4); }
+  50% { box-shadow: 0 0 0 12px hsl(42 95% 52% / 0); }
+}
+
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-2%, -3%); }
+  30% { transform: translate(3%, 2%); }
+  50% { transform: translate(-1%, 4%); }
+  70% { transform: translate(4%, -1%); }
+  90% { transform: translate(-3%, 1%); }
 }
 
 .animate-scroll {
-  animation: scroll 25s linear infinite;
+  animation: scroll 35s linear infinite;
 }
-
 .animate-scroll:hover {
   animation-play-state: paused;
+}
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, hsl(var(--safari-gold) / 0.15), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+.animate-pulse-gold {
+  animation: pulse-gold 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ── Step wizard progress ── */
+.step-indicator {
+  @apply flex items-center justify-center w-10 h-10 rounded-full text-sm font-semibold transition-all duration-300;
+}
+.step-indicator.active {
+  background: hsl(var(--safari-gold));
+  color: hsl(20 18% 7%);
+  box-shadow: 0 0 0 4px hsl(var(--safari-gold) / 0.2);
+}
+.step-indicator.completed {
+  background: hsl(var(--safari-emerald));
+  color: white;
+}
+.step-indicator.pending {
+  background: hsl(var(--muted));
+  color: hsl(var(--muted-foreground));
+}
+
+/* ── Seat map styles ── */
+.seat {
+  @apply transition-all duration-200 cursor-pointer;
+}
+.seat:hover { filter: brightness(1.2); }
+.seat.available { fill: hsl(var(--safari-stone)); }
+.seat.selected { fill: hsl(var(--safari-gold)); }
+.seat.occupied { fill: hsl(var(--safari-warm-brown) / 0.5); cursor: not-allowed; }
+
+/* ── Van ambient lighting ── */
+.van-ambient-warm {
+  background: radial-gradient(ellipse at 50% 40%, hsl(38 60% 20%) 0%, hsl(20 18% 7%) 70%);
+}
+.van-ambient-cool {
+  background: radial-gradient(ellipse at 50% 40%, hsl(200 40% 15%) 0%, hsl(20 18% 7%) 70%);
+}
+
+/* ── Toast notification ── */
+.discount-toast {
+  @apply fixed bottom-6 left-1/2 -translate-x-1/2 z-50;
+  @apply flex items-center gap-4 px-6 py-4 rounded-2xl shadow-2xl;
+  background: linear-gradient(135deg, hsl(20 18% 10%) 0%, hsl(28 22% 14%) 100%);
+  border: 1px solid hsl(var(--safari-gold) / 0.4);
+  max-width: 90vw;
 }
